@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Borrownote.iml" filepath="$PROJECT_DIR$/Borrownote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Borrow-Note.iml" filepath="$PROJECT_DIR$/Borrow-Note.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
