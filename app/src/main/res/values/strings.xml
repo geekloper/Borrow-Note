@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Borrow Note</string>
+    <string name="btn_add">Ajouter</string>
+    <string name="text_message_hint">Votre livre...</string>
+    <string name="title_activity_confirmation">Confirmation</string>
+    <string name="confirm_header">Voulez-vous vraiment ajouté le livre :</string>
+    <string name="btn_confirm">Confirmer</string>
+    <string name="btn_edit">Modifier</string>
+    <string name="btn_cancel">Annuler</string>
+    <string name="book_name">Nom du livre</string>
+    <string name="date">Date</string>
+    <string name="note">Note</string>
+    <string name="tv_from">De :</string>
+    <string name="tv_date">Le :</string>
+    <string name="tv_message">Message :</string>
+    <string name="btn_new">Nouvel empruntt</string>
+    <string name="btn_prev">Livre précédant</string>
+    <string name="btn_next">Livre suivant</string>
+    <string name="tv_pk">Primary Key SQL du livre :</string>
+    <string name="aucun_livre">Aucun Livre</string>
+    <string name="dernier_message">Il n\'y a pas d\'autres livres</string>
+    <string name="livre_ajoute">Livre ajouté</string>
+    <string name="btn_delete">Supprimer</string>
+    <string name="ok">OK</string>
+    <string name="pas_permission_reseau">Cette application a besoin d\'accéder à Internet pour télécharger les images représentant chaque livre. Sans la permission, il n'y aura pas d'images.</string>
+    <string name="batterie_faible">La batterie est faible, le téléchargement des images est suspendu</string>
+    <string name="batterie_ok">Le téléchargement des images est réactivé</string>
+    <string name="menu_delete">Supprimer</string>
+    <string name="menu_search">Chercher</string>
+    <string name="search_hint">Titre , note ..</string>
+</resources>
