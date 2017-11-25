@@ -1,6 +1,9 @@
 package com.geekloper.borrownote
 
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -14,6 +17,9 @@ import java.util.*
 class AjouterActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_LIST_CHANGED = "AjouterActivity.EXTRA_LIST_CHANGED"
+        const val EXTRA_NOM_LIVRE = "AjouterActivity.EXTRA_NOM_LIVRE"
+        const val EXTRA_DATE = "AjouterActivity.EXTRA_DATE"
+        const val EXTRA_NOTE = "AjouterActivity.EXTRA_NOTE"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +28,35 @@ class AjouterActivity : AppCompatActivity() {
 
         btn_send.setOnClickListener {
             startActivityForResult<ConfirmationActivity>(42, ConfirmationActivity.EXTRA_MESSAGE to txt_note.text.toString())
+        }
+
+        btn_schedule.setOnClickListener {
+
+            val mgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+            //Envoyer les information dans le PendingIntent
+            val intent = Intent(this, AlarmReceiver::class.java)
+            intent.putExtra(EXTRA_NOM_LIVRE, txt_nom_livre.text.toString())
+            intent.putExtra(EXTRA_NOTE, txt_note.text.toString())
+            intent.putExtra(EXTRA_DATE, txt_date.text.toString())
+
+            val alarmIntent = PendingIntent.getBroadcast(this, 42, intent, 0)
+            val calendar = Calendar.getInstance()
+
+            val date:Date = Date(txt_date.text.toString())
+            calendar.time = date
+
+            // La date de retour à 7:00
+            calendar.set(Calendar.HOUR_OF_DAY, 7)
+            calendar.set(Calendar.MINUTE, 0)
+            calendar.add(Calendar.SECOND, 0)
+
+            mgr.set(AlarmManager.RTC_WAKEUP,calendar.timeInMillis,alarmIntent)
+
+            toast(getString(R.string.livre_ajoute))
+
+            finish()
+
         }
     }
 

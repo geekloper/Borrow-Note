@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Borrow Note</string>
     <string name="btn_add">Ajouter</string>
+    <string name="btn_schedule">Planifier l\'ajout</string>
     <string name="text_message_hint">Votre livre...</string>
     <string name="title_activity_confirmation">Confirmation</string>
     <string name="confirm_header">Voulez-vous vraiment ajouté le livre :</string>

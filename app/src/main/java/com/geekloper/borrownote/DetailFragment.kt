@@ -35,19 +35,6 @@ class DetailFragment : Fragment(){
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        btn_delete.setOnClickListener {
-            // On supprime le message actuellement affiché de la base de données
-            activity.dbLivres.use {
-                // TODO: penser à aussi supprimer son image si il en a une
-                delete(DBLivres.TABLE_LIVRES,
-                        "${DBLivres.TABLE_LIVRES_ID} = {id}",
-                        "id" to idMessage)
-            }
-            // On prévient notre activité :
-            // si on est sur tablette, ce fragment est directement dans MainActivity qui va mettre à la jour le RecyclerView
-            // si on est sur téléphone, ce fragment est dans DetailActivity, c'est lui qui va prévenir MainActivity pour nous
-            mListener!!.onMessageDelete()
-        }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
