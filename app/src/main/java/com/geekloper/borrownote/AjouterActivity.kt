@@ -99,7 +99,7 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
                                         DBLivres.COLUMN_LIVRES_NOTE to txt_note.text.toString(),
                                         DBLivres.COLUMN_LIVRES_TITRE to txt_nom_livre.text.toString(),
                                         DBLivres.COLUMN_LIVRES_DATE to Date(txt_date.text.toString()).time,
-                                        DBLivres.COLUMN_LIVRES_ADRESS_LATITUDE to get_location()?.get(1),
+                                        DBLivres.COLUMN_LIVRES_ADRESS_LATITUDE to get_location()?.get(0),
                                         DBLivres.COLUMN_LIVRES_ADRESS_LONGTITUDE to get_location()?.get(1))
                             }
                             toast(R.string.livre_ajoute)

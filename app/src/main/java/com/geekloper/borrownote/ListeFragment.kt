@@ -211,10 +211,6 @@ class ListeFragment : Fragment(){
                     // On a correctement télécharger une nouvelle image
                     return file.path
 
-                    // TODO : on aurait pu avoir d'autres alternatives à la sauvegarde de l'image dans un fichier :
-                    // - sauvegarder son URL réelle fixe (après redirection par unsplash.com/random) avec "conn.url" et le re-télécharger à chaque fois
-                    // - sauvegarder l'inputstream binaire directement dans une colonne BLOB (données binaires) de la base de données
-                    // - créer un Bitmap avec BitmapFactory ici et appeller bitmap.compress plus tard pour l'écrire dans un fichier sans gérer les OutputStream nous même
                 }
             } catch(e: FileNotFoundException){
                 // on ne fait rien, on laisse la valeur à null
@@ -240,5 +236,4 @@ class ListeFragment : Fragment(){
             }
         }
     } // Fin de DownloadTask
-
 }
