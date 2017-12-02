@@ -52,7 +52,9 @@ class DetailFragment : Fragment(){
                     DBLivres.TABLE_LIVRES_ID, // Toutes les colones
                     DBLivres.COLUMN_LIVRES_TITRE,
                     DBLivres.COLUMN_LIVRES_DATE,
-                    DBLivres.COLUMN_LIVRES_NOTE)
+                    DBLivres.COLUMN_LIVRES_NOTE,
+                    DBLivres.COLUMN_LIVRES_ADRESS_LATITUDE,
+                    DBLivres.COLUMN_LIVRES_ADRESS_LONGTITUDE)
                     .whereArgs("${DBLivres.TABLE_LIVRES_ID} = {id}", // On va charger un message à la fois avec comme identifiant id
                             "id" to idMessage)
                     .exec {
@@ -72,6 +74,7 @@ class DetailFragment : Fragment(){
                                 val date = Date()
                                 date.time = row[DBLivres.COLUMN_LIVRES_DATE] as Long
                                 tv_date.text = date.toLocaleString()
+                                tv_location.text = row[DBLivres.COLUMN_LIVRES_ADRESS_LATITUDE] as String? +  row[DBLivres.COLUMN_LIVRES_ADRESS_LONGTITUDE] as String?
                                 tv_note.text = row[DBLivres.COLUMN_LIVRES_NOTE] as String
                             }
                         }

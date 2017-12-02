@@ -29,4 +29,8 @@
     <string name="menu_delete">Supprimer</string>
     <string name="menu_search">Chercher</string>
     <string name="search_hint">Titre , note ..</string>
+    <string name="position_actuelle">Position actuelle</string>
+    <string name="adresse_biblio">Adresse de la bliothèque</string>
+    <string name="adresse_specifique">Une adresse spécifique</string>
+    <string name="adresse_hint">21 , Avenue Marechal Joffre ... </string>
 </resources>

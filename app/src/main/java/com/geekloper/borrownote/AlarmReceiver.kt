@@ -18,6 +18,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val date = intent.getStringExtra(AjouterActivity.EXTRA_DATE)
         val note = intent.getStringExtra(AjouterActivity.EXTRA_NOTE)
 
+        //TODO : insert location
          context.dbLivres.use {
             insert(DBLivres.TABLE_LIVRES,
                     DBLivres.COLUMN_LIVRES_NOTE to note,
