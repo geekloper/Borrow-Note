@@ -3,15 +3,17 @@ package com.geekloper.borrownote
 import android.app.Activity
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.location.Geocoder
-import android.location.Location
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.widget.Toast
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.LocationServices
@@ -20,6 +22,8 @@ import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.startActivityForResult
 import org.jetbrains.anko.toast
 import java.util.*
+import android.Manifest
+import java.io.File
 
 // Le code de cette activity provient pour beaucoup de l'ancien code de MainActivity
 class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallbacks , GoogleApiClient.OnConnectionFailedListener {
@@ -32,6 +36,7 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
 
     lateinit var apiClient: GoogleApiClient
     var gapiOkay = false // initialement pas okay
+    var filePath: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +78,34 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
 
         }
 
+        btn_take_picture.setOnClickListener {
+
+            // Checker la permission WRITE_EXTERNAL_STORAGE
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+
+            // Checker la permission CAMERA
+            else if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), 1)
+
+            else {
+                val intentPhoto = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+
+                val uri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, ContentValues())
+                intentPhoto.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+
+                with(contentResolver.query(uri, arrayOf(android.provider.MediaStore.Images.ImageColumns.DATA), null, null, null)) {
+                    moveToFirst()
+                    filePath = getString(0)
+                    close()
+                }
+
+                if (intentPhoto.resolveActivity(packageManager) != null) {
+                    startActivityForResult(intentPhoto, 10)
+                }
+            }
+        }
+
         //Désactiver/activer txt_adresse_specifique en fontion de l'etat du radio button  rb_adresse_specifique
         rb_adresse_specifique.setOnCheckedChangeListener { buttonView, isChecked ->
             if(isChecked)
@@ -89,6 +122,11 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
                                   data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
+            10 -> {
+                if(resultCode == RESULT_OK){
+                    iv_book_preview.setImageBitmap(BitmapFactory.decodeFile(filePath))
+                }
+            }
             42 -> {
                 if (resultCode == RESULT_OK) {
                     val r = data?.getIntExtra(ConfirmationActivity.EXTRA_ISCONFIRMED, ConfirmationActivity.VAL_CANCEL) ?: ConfirmationActivity.VAL_CANCEL
@@ -100,7 +138,8 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
                                         DBLivres.COLUMN_LIVRES_TITRE to txt_nom_livre.text.toString(),
                                         DBLivres.COLUMN_LIVRES_DATE to Date(txt_date.text.toString()).time,
                                         DBLivres.COLUMN_LIVRES_ADRESS_LATITUDE to get_location()?.get(0),
-                                        DBLivres.COLUMN_LIVRES_ADRESS_LONGTITUDE to get_location()?.get(1))
+                                        DBLivres.COLUMN_LIVRES_ADRESS_LONGTITUDE to get_location()?.get(1),
+                                        DBLivres.COLUMN_LIVRES_IMAGE to filePath)
                             }
                             toast(R.string.livre_ajoute)
                             // On prévient MainActivity que la liste a changé
@@ -117,6 +156,13 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
                             val retIntent = Intent()
                             retIntent.putExtra(EXTRA_LIST_CHANGED, false)
                             setResult(Activity.RESULT_OK, retIntent)
+
+                            //On supprime la photo si on a pas ajouté le livre
+                            if(filePath != null){
+                                var image = File(filePath)
+                                image.delete()
+                            }
+
                             finish()
                         }
                     }

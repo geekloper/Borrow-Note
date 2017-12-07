@@ -33,4 +33,5 @@
     <string name="adresse_biblio">Adresse de la bliothèque</string>
     <string name="adresse_specifique">Une adresse spécifique</string>
     <string name="adresse_hint">21 , Avenue Marechal Joffre ... </string>
+    <string name="prendre_photo">Prendre une photo</string>
 </resources>

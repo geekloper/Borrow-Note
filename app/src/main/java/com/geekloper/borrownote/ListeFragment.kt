@@ -111,14 +111,6 @@ class ListeFragment : Fragment(){
                             date,
                             row[DBLivres.COLUMN_LIVRES_IMAGE] as String?
                     ))
-                    // Si on a une image vide, on télécharge une nouvelle image
-                    // - soit on vient d'ajouter cet item
-                    // - soit la fonction était désactivée (batterie faible)
-                    // - soit pas d'internet avant (ni wifi ni 3G/4G)
-                    // - soit anciens messages du TP4, avant qu'on ajoute cette fonction
-                    // - autres cas ?
-                    if(row[DBLivres.COLUMN_LIVRES_IMAGE] == null)
-                        telechargerImage(row[DBLivres.TABLE_LIVRES_ID] as Long)
                 }
             }
         }
@@ -151,89 +143,4 @@ class ListeFragment : Fragment(){
             }
         }
     }
-
-    fun telechargerImage(id: Long){
-        if(batRcv.desactive){
-            // Pas de téléchargement d'image pour l'instant
-        }else {
-            if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(activity, android.Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
-                //toast("Permission Internet Ok")
-                val connMgr = activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                when (connMgr.activeNetworkInfo?.type) {
-                    ConnectivityManager.TYPE_WIFI, ConnectivityManager.TYPE_MOBILE ->
-                        DownloadTask(id).execute(URL("https://source.unsplash.com/random/200x200")) // 200x200 : petites images carrées
-                    null -> {
-                        toast("Pas de réseau")
-                    }
-                }
-            } else {
-                // On demande la permission
-                ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.INTERNET, Manifest.permission.ACCESS_NETWORK_STATE), 1);
-            }
-        }
-    }
-
-    inner class DownloadTask(val id: Long) : AsyncTask<URL, Void, String?>() {
-        override fun doInBackground(vararg params: URL): String? {
-
-            try {
-                val conn = params[0].openConnection() as HttpURLConnection
-                conn.connect()
-                if (conn.responseCode != HttpURLConnection.HTTP_OK) {
-                    // on ne fait rien, on laisse la valeur à null
-                    return null
-                }else {
-                    // J'ai donc un InputStream (conn.inputStream) et je veux l'écrire dans un fichier
-                    // Je cherche sur Google "android write inputstream in file"
-                    // Le code qui suit provient du premier résultat :
-                    // https://stackoverflow.com/questions/10854211/android-store-inputstream-in-file
-
-                    val file = File(activity.filesDir, "$id")
-                    // on stocke le fichier dans le stockage internet du téléphone
-                    // Nom du fichier = primary key du message (comme ça on est sur que c'est unique)
-                    val output = FileOutputStream(file)
-                    try {
-                        val buffer = ByteArray(4 * 1024) // or other buffer size
-                        var read = conn.inputStream.read(buffer)
-
-                        while (read != -1) {
-                            output.write(buffer, 0, read)
-                            read = conn.inputStream.read(buffer)
-                        }
-
-                        output.flush()
-                    } finally {
-                        output.close()
-                    }
-                    // Fin du code de stackoverflow pour écrire un InputStream dans un fichier
-
-                    // On a correctement télécharger une nouvelle image
-                    return file.path
-
-                }
-            } catch(e: FileNotFoundException){
-                // on ne fait rien, on laisse la valeur à null
-                return null
-            } catch(e: UnknownHostException){
-                return null
-            } catch(e: ConnectException){
-                return null
-            } catch(e: IOException){
-                return null
-            }
-        }
-
-        override fun onPostExecute(result: String?) {
-            // On a une nouvelle image, on met à jour la base de données et on recharge la liste pour l'afficher
-            if(result != null) {
-                activity.dbLivres.use {
-                    update(DBLivres.TABLE_LIVRES, DBLivres.COLUMN_LIVRES_IMAGE to result)
-                            .whereArgs("${DBLivres.TABLE_LIVRES_ID} = {id}", "id" to id).exec()
-                }
-
-                chargerListe()
-            }
-        }
-    } // Fin de DownloadTask
 }
