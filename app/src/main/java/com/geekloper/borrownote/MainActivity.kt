@@ -123,6 +123,9 @@ class MainActivity : AppCompatActivity(), DetailFragment.Listener, ListeFragment
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
 
+        val item = menu?.findItem(R.id.menu_delete)
+        item?.setVisible(false)
+
         return super.onCreateOptionsMenu(menu)
     }
 }

@@ -86,6 +86,8 @@ class DetailFragment : Fragment(){
 
     override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
         inflater?.inflate(R.menu.menu, menu)
+        val item = menu?.findItem(R.id.action_search)
+        item?.setVisible(false)
         super.onCreateOptionsMenu(menu, inflater)
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
