@@ -8,6 +8,12 @@
         app:showAsAction="always" />
 
     <item
+        android:id="@+id/action_share"
+        android:icon="?attr/actionModeShareDrawable"
+        android:title="@string/menu_delete"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/action_search"
         android:icon="@mipmap/ic_search_white_24dp"
         android:title="@string/menu_search"

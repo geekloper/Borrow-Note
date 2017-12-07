@@ -1,14 +1,18 @@
 package com.geekloper.borrownote
 
+import android.app.Activity.RESULT_OK
 import android.app.Fragment
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.*
 import kotlinx.android.synthetic.main.fragment_detail.*
 import org.jetbrains.anko.db.asMapSequence
 import org.jetbrains.anko.db.select
 import org.jetbrains.anko.db.delete
+import org.jetbrains.anko.sendSMS
 import org.jetbrains.anko.toast
 import java.io.File
 import java.util.*
@@ -122,7 +126,38 @@ class DetailFragment : Fragment(){
                 mListener!!.onMessageDelete()
                 return true
             }
-            else -> return super.onOptionsItemSelected(item)
+            R.id.action_share -> {
+
+                val intentContact = Intent(Intent.ACTION_PICK)
+                intentContact.type = ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
+                if (intentContact.resolveActivity(activity.packageManager) != null) {
+                    startActivityForResult(intentContact, 42)
+                }
+
+            }
         }
+            return super.onOptionsItemSelected(item)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when(requestCode){
+
+            42 -> {
+
+                if(resultCode == RESULT_OK) {
+                    with(activity.contentResolver.query(data?.data,arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),null, null, null)) {
+                        moveToFirst()
+                        val telephone = getString(0)
+
+                        sendSMS(telephone, "Livre : ${tv_nom_livre.text}" )
+                    }
+                }
+
+            }
+
+        }
+
     }
 }
