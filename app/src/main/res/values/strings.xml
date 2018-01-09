@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Borrow Note</string>
     <string name="btn_add">Ajouter</string>
-    <string name="btn_schedule">Planifier l\'ajout</string>
+    <string name="btn_schedule">Ajouter le jour de l\'emprunt</string>
     <string name="text_message_hint">Votre livre...</string>
     <string name="title_activity_confirmation">Confirmation</string>
     <string name="confirm_header">Voulez-vous vraiment ajouté le livre :</string>
@@ -9,7 +9,7 @@
     <string name="btn_edit">Modifier</string>
     <string name="btn_cancel">Annuler</string>
     <string name="book_name">Nom du livre</string>
-    <string name="date">Date</string>
+    <string name="date_emprunt">Date d\'emprunt du livre</string>
     <string name="note">Note</string>
     <string name="tv_from">De :</string>
     <string name="tv_date">Le :</string>

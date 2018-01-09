@@ -4,6 +4,7 @@ import android.app.Activity.RESULT_OK
 import android.app.Fragment
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
@@ -59,15 +60,13 @@ class DetailFragment : Fragment(){
                     DBLivres.COLUMN_LIVRES_TITRE,
                     DBLivres.COLUMN_LIVRES_DATE,
                     DBLivres.COLUMN_LIVRES_NOTE,
-                    DBLivres.COLUMN_LIVRES_ADRESS_LATITUDE,
-                    DBLivres.COLUMN_LIVRES_ADRESS_LONGTITUDE)
+                    DBLivres.COLUMN_LIVRES_IMAGE)
                     .whereArgs("${DBLivres.TABLE_LIVRES_ID} = {id}", // On va charger un message à la fois avec comme identifiant id
                             "id" to idLivre)
                     .exec {
                         if(count == 0){
                             // Au cas où il n'y est aucun message
                             val am = activity.getString(R.string.aucun_livre)
-                            tv_pk.text = am
                             tv_nom_livre.text = am
                             tv_date.text = am
                             tv_note.text = am
@@ -75,13 +74,14 @@ class DetailFragment : Fragment(){
                             // 1 message maximum retourné, parce que les id sont uniques (PK)
                             for (row in asMapSequence()) {
                                 // On ne passe qu'une seule fois dans le for du coup
-                                tv_pk.text = (row[DBLivres.TABLE_LIVRES_ID] as Long).toString()
                                 tv_nom_livre.text = row[DBLivres.COLUMN_LIVRES_TITRE] as String
                                 val date = Date()
                                 date.time = row[DBLivres.COLUMN_LIVRES_DATE] as Long
                                 tv_date.text = date.toLocaleString()
-                                tv_location.text = row[DBLivres.COLUMN_LIVRES_ADRESS_LATITUDE] as String? +  row[DBLivres.COLUMN_LIVRES_ADRESS_LONGTITUDE] as String?
                                 tv_note.text = row[DBLivres.COLUMN_LIVRES_NOTE] as String
+
+                                if(row[DBLivres.COLUMN_LIVRES_IMAGE] != null)
+                                    iv_detail.setImageBitmap((BitmapFactory.decodeFile(row[DBLivres.COLUMN_LIVRES_IMAGE] as String)))
                             }
                         }
                     }

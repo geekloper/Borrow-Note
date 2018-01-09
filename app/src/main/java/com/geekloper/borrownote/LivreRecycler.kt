@@ -10,20 +10,20 @@ import android.widget.TextView
 import java.util.*
 
 data class LivreRVD(val id: Long,
-                   val expediteur: String,
+                   val titre: String,
                    val date: Date,
                    val image: String?)
 
 class LivreRecyclerAdapter(val list: List<LivreRVD>, val listener: (LivreRVD) -> Unit) : RecyclerView.Adapter<LivreRecyclerAdapter.MessageViewHolder>() {
 
     inner class MessageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        var expediteur: TextView = view.findViewById(R.id.tv_nom_livre)
+        var titre: TextView = view.findViewById(R.id.tv_nom_livre)
         var date: TextView = view.findViewById(R.id.tv_date)
         var image: ImageView = view.findViewById(R.id.iv_image)
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-        holder.expediteur.text = list[position].expediteur
+        holder.titre.text = list[position].titre
         holder.date.text = list[position].date.toLocaleString()
         if(list[position].image != null) {
             holder.image.setImageBitmap(BitmapFactory.decodeFile(list[position].image))

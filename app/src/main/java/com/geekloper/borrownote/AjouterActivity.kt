@@ -46,7 +46,8 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
                 .addConnectionCallbacks(this).addOnConnectionFailedListener(this).build()
 
         btn_send.setOnClickListener {
-            startActivityForResult<ConfirmationActivity>(42, ConfirmationActivity.EXTRA_MESSAGE to txt_note.text.toString())
+            //startActivityForResult<ConfirmationActivity>(42, ConfirmationActivity.EXTRA_MESSAGE to txt_note.text.toString())
+            Ajouter_Livre()
         }
 
         btn_schedule.setOnClickListener {
@@ -132,23 +133,7 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
                     val r = data?.getIntExtra(ConfirmationActivity.EXTRA_ISCONFIRMED, ConfirmationActivity.VAL_CANCEL) ?: ConfirmationActivity.VAL_CANCEL
                     when(r){
                         ConfirmationActivity.VAL_CONFIRMED -> {
-                            dbLivres.use {
-                                insert(DBLivres.TABLE_LIVRES,
-                                        DBLivres.COLUMN_LIVRES_NOTE to txt_note.text.toString(),
-                                        DBLivres.COLUMN_LIVRES_TITRE to txt_nom_livre.text.toString(),
-                                        DBLivres.COLUMN_LIVRES_DATE to Date(txt_date.text.toString()).time,
-                                        DBLivres.COLUMN_LIVRES_ADRESS_LATITUDE to get_location()?.get(0),
-                                        DBLivres.COLUMN_LIVRES_ADRESS_LONGTITUDE to get_location()?.get(1),
-                                        DBLivres.COLUMN_LIVRES_IMAGE to filePath)
-                            }
-                            toast(R.string.livre_ajoute)
-                            // On prévient MainActivity que la liste a changé
-                            val retIntent = Intent()
-                            retIntent.putExtra(EXTRA_LIST_CHANGED, true)
-                            setResult(Activity.RESULT_OK, retIntent)
-                            // Et on ferme l'écran de saisie et on revient à MainActivity
-                            // Ca va aussi effacer tous les champs
-                            finish()
+                            Ajouter_Livre()
                         }
                         ConfirmationActivity.VAL_EDIT -> { } // rien de spécial à faire
                         ConfirmationActivity.VAL_CANCEL -> {
@@ -174,6 +159,22 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
         }
     }
 
+    private fun Ajouter_Livre(){
+        dbLivres.use {
+            insert(DBLivres.TABLE_LIVRES,
+                    DBLivres.COLUMN_LIVRES_NOTE to txt_note.text.toString(),
+                    DBLivres.COLUMN_LIVRES_TITRE to txt_nom_livre.text.toString(),
+                    DBLivres.COLUMN_LIVRES_DATE to Date(txt_date.text.toString()).time,
+                    DBLivres.COLUMN_LIVRES_ADRESS_LATITUDE to get_location()?.get(0),
+                    DBLivres.COLUMN_LIVRES_ADRESS_LONGTITUDE to get_location()?.get(1),
+                    DBLivres.COLUMN_LIVRES_IMAGE to filePath)
+        }
+        toast(R.string.livre_ajoute)
+        val retIntent = Intent()
+        retIntent.putExtra(EXTRA_LIST_CHANGED, true)
+        setResult(Activity.RESULT_OK, retIntent)
+        finish()
+    }
 
     fun get_location(): Array<String>? {
 
