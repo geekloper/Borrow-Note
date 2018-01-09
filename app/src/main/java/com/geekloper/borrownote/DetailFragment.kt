@@ -21,7 +21,6 @@ import java.util.*
 
 class DetailFragment : Fragment(){
     interface Listener {
-        // Quand on supprime un message, il faut prévenir MainActivity de mettre à jour la liste
         fun onMessageDelete()
     }
 
@@ -36,7 +35,6 @@ class DetailFragment : Fragment(){
         }
     }
 
-    // L'id du message actuellement affiché
     var idLivre : Long = -1;
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -50,30 +48,30 @@ class DetailFragment : Fragment(){
     }
 
     fun afficherDetail(id: Long) {
-        // On sauvegarde l'id affiché
+
         idLivre = id
 
-        // On charge le message de la base de données
+
         activity.dbLivres.use {
-            select(DBLivres.TABLE_LIVRES, // Table
-                    DBLivres.TABLE_LIVRES_ID, // Toutes les colones
+            select(DBLivres.TABLE_LIVRES,
+                    DBLivres.TABLE_LIVRES_ID,
                     DBLivres.COLUMN_LIVRES_TITRE,
                     DBLivres.COLUMN_LIVRES_DATE,
                     DBLivres.COLUMN_LIVRES_NOTE,
                     DBLivres.COLUMN_LIVRES_IMAGE)
-                    .whereArgs("${DBLivres.TABLE_LIVRES_ID} = {id}", // On va charger un message à la fois avec comme identifiant id
+                    .whereArgs("${DBLivres.TABLE_LIVRES_ID} = {id}",
                             "id" to idLivre)
                     .exec {
                         if(count == 0){
-                            // Au cas où il n'y est aucun message
+                            // Au cas où il n'y est aucun Livre
                             val am = activity.getString(R.string.aucun_livre)
                             tv_nom_livre.text = am
                             tv_date.text = am
                             tv_note.text = am
                         }else {
-                            // 1 message maximum retourné, parce que les id sont uniques (PK)
+
                             for (row in asMapSequence()) {
-                                // On ne passe qu'une seule fois dans le for du coup
+
                                 tv_nom_livre.text = row[DBLivres.COLUMN_LIVRES_TITRE] as String
                                 val date = Date()
                                 date.time = row[DBLivres.COLUMN_LIVRES_DATE] as Long

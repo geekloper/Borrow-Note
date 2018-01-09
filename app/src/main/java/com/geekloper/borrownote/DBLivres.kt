@@ -49,6 +49,7 @@ class DBLivres(ctx: Context) : ManagedSQLiteOpenHelper(ctx, DATABASE_NAME, null,
             db.execSQL("ALTER TABLE $TABLE_LIVRES ADD $COLUMN_LIVRES_IMAGE TEXT;")
         }
         if(oldVersion < 12) {
+            // Mise à jour de la v11 à la v12
             db.execSQL("ALTER TABLE $TABLE_LIVRES ADD $COLUMN_LIVRES_ADRESS_LATITUDE TEXT;")
             db.execSQL("ALTER TABLE $TABLE_LIVRES ADD $COLUMN_LIVRES_ADRESS_LONGTITUDE TEXT;")
         }

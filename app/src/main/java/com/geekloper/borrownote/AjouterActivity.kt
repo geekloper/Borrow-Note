@@ -25,7 +25,7 @@ import java.util.*
 import android.Manifest
 import java.io.File
 
-// Le code de cette activity provient pour beaucoup de l'ancien code de MainActivity
+
 class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallbacks , GoogleApiClient.OnConnectionFailedListener {
     companion object {
         const val EXTRA_LIST_CHANGED = "AjouterActivity.EXTRA_LIST_CHANGED"
@@ -48,7 +48,6 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
                 .addConnectionCallbacks(this).addOnConnectionFailedListener(this).build()
 
         btn_send.setOnClickListener {
-            //startActivityForResult<ConfirmationActivity>(42, ConfirmationActivity.EXTRA_MESSAGE to txt_note.text.toString())
             Ajouter_Livre()
         }
 
@@ -71,7 +70,7 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
             val date:Date = Date(txt_date.text.toString())
             calendar.time = date
 
-            // La date de retour à 7:00
+            // La date d'emprun à 7:00
             calendar.set(Calendar.HOUR_OF_DAY, 7)
             calendar.set(Calendar.MINUTE, 0)
             calendar.add(Calendar.SECOND, 0)

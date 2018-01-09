@@ -67,7 +67,7 @@ class ListeFragment : Fragment(){
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        // On charge la liste des message depuis la base de données
+        // On charge la liste des livres depuis la base de données
         chargerListe()
     }
 
@@ -80,17 +80,16 @@ class ListeFragment : Fragment(){
     }
     var query : String = ""
     fun chargerListe() {
-        // Les messages qui sont affichés dans le RecyclerView
+
         val listeLivres = arrayListOf<LivreRVD>()
 
-        // On select sur la base de données
         activity.dbLivres.use {
-            select(DBLivres.TABLE_LIVRES, // Table
-                    DBLivres.TABLE_LIVRES_ID, // Les colones de MessageRVD uniquement
+            select(DBLivres.TABLE_LIVRES,
+                    DBLivres.TABLE_LIVRES_ID,
                     DBLivres.COLUMN_LIVRES_TITRE,
                     DBLivres.COLUMN_LIVRES_DATE,
                     DBLivres.COLUMN_LIVRES_IMAGE).whereArgs(query).exec {
-                // Pas de Where, on veut tous les messages
+
                 for (row in asMapSequence()) {
                     val date = Date()
                     date.time = row[DBLivres.COLUMN_LIVRES_DATE] as Long
@@ -106,7 +105,7 @@ class ListeFragment : Fragment(){
 
         rv_liste.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
         rv_liste.adapter = LivreRecyclerAdapter(listeLivres){
-            // On prévient MainActivity que l'utilisateur a cliqué sur un message
+            // On prévient MainActivity que l'utilisateur a cliqué sur un livre
             mListener!!.onMessageSelection(it.id)
         }
     }
@@ -116,8 +115,7 @@ class ListeFragment : Fragment(){
             1 -> {
                 // 1 = les permissions réseaux. Normalement c'est automatique par dérogation, mais on ne sait jamais
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission accordée, il faut maintenant relancer le traitement qui necéssitait cette permission
-                    // On recharge la liste pour trouver (dans la boucle de chargerListe) tous les messages sans images
+                    // Permission accordée
                     chargerListe()
                 } else {
                     // Permission refusées par l'utilisateur
