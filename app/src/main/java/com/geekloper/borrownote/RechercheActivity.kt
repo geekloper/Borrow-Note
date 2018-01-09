@@ -6,12 +6,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.opengl.Visibility
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.SearchView
+import android.util.Log
 import android.view.Menu
+import android.view.View
+import kotlinx.android.synthetic.main.activity_recherche.*
+import kotlinx.android.synthetic.main.fragment_liste.*
 import org.jetbrains.anko.db.asMapSequence
 import org.jetbrains.anko.db.select
 import org.jetbrains.anko.startActivityForResult
@@ -29,6 +34,24 @@ class RechercheActivity : AppCompatActivity() , DetailFragment.Listener, ListeFr
             val fragListe = fragmentManager.findFragmentById(R.id.frag_liste) as ListeFragment
             fragListe.query = DBLivres.COLUMN_LIVRES_NOTE + " like '%" + query + "%' OR " + DBLivres.COLUMN_LIVRES_TITRE + " like '%" + query + "%'"
             fragListe.chargerListe()
+
+            // Si on ne trouve aucun résultat on affiche le bouton rechercher sur internet
+            if(fragListe.rv_liste.adapter.itemCount ==0 ){
+
+                btn_suggest.visibility = View.VISIBLE
+                tv_aucun.visibility = View.VISIBLE
+
+                btn_suggest.setOnClickListener {
+
+                    val ite = Intent(this , SuggestionActivity::class.java )
+
+                    ite.putExtra(SuggestionActivity.EXTRA_QUERY , intent.getStringExtra(SearchManager.QUERY) )
+
+                    startActivity(ite)
+
+                }
+
+            }
         }
     }
 

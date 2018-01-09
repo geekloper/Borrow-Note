@@ -24,14 +24,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value=".RechercheActivity" />
         </activity>
-        <activity
-            android:name=".ConfirmationActivity"
-            android:label="@string/title_activity_confirmation"
-            android:parentActivityName=".MainActivity" />
         <activity android:name=".AjouterActivity" />
         <activity android:name=".DetailActivity" />
         <activity android:name=".RechercheActivity">
@@ -47,7 +44,9 @@
         <receiver
             android:name=".AlarmReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
+
+        <activity android:name=".SuggestionActivity"></activity>
     </application>
 
 </manifest>

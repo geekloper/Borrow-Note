@@ -34,4 +34,6 @@
     <string name="adresse_specifique">Une adresse spécifique</string>
     <string name="adresse_hint">21 , Avenue Marechal Joffre ... </string>
     <string name="prendre_photo">Prendre une photo</string>
+    <string name="btn_suggest">Rechercher dans les bibliothéques de paris</string>
+    <string name="aucun_resultat">Aucun résultat trouver !</string>
 </resources>
