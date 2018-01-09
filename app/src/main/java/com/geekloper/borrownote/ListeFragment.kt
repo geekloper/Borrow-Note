@@ -63,17 +63,9 @@ class ListeFragment : Fragment(){
         }
     }
 
-    // Le batterie receiver dynamique. Comme on l'utilise pour désactiver une fonction de notre appli,
-    // on ne s'intéresse au messages que quand notre appli est active (et pas quand elle n'est pas active)
-    // donc on fait un receiver dynamique qu'on enregistre dans onCreate et supprime dans onDestroy
-    // plutôt qu'un receiver statique de serait toujours actif
-    val batRcv = BatterieReceiver()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        activity.registerReceiver(batRcv, IntentFilter(Intent.ACTION_BATTERY_LOW))
-        activity.registerReceiver(batRcv, IntentFilter(Intent.ACTION_BATTERY_OKAY))
 
         // On charge la liste des message depuis la base de données
         chargerListe()
@@ -85,9 +77,6 @@ class ListeFragment : Fragment(){
 
     override fun onDestroy() {
         super.onDestroy()
-
-        // Ce qui est initialisé dans onCreate doit être déinitiliasé dans onDestroy
-        activity.unregisterReceiver(batRcv)
     }
     var query : String = ""
     fun chargerListe() {
