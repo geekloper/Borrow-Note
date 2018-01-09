@@ -32,6 +32,8 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
         const val EXTRA_NOM_LIVRE = "AjouterActivity.EXTRA_NOM_LIVRE"
         const val EXTRA_DATE = "AjouterActivity.EXTRA_DATE"
         const val EXTRA_NOTE = "AjouterActivity.EXTRA_NOTE"
+        const val EXTRA_ADRESS_LATITUDE = "AjouterActivity.EXTRA_ADRESS_LATITUDE"
+        const val EXTRA_ADRESS_LONGTITUDE = "AjouterActivity.EXTRA_ADRESS_LONGTITUDE"
     }
 
     lateinit var apiClient: GoogleApiClient
@@ -59,6 +61,9 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
             intent.putExtra(EXTRA_NOM_LIVRE, txt_nom_livre.text.toString())
             intent.putExtra(EXTRA_NOTE, txt_note.text.toString())
             intent.putExtra(EXTRA_DATE, txt_date.text.toString())
+            intent.putExtra(EXTRA_ADRESS_LATITUDE,  get_location()?.get(0))
+            intent.putExtra(EXTRA_ADRESS_LONGTITUDE,  get_location()?.get(1))
+
 
             val alarmIntent = PendingIntent.getBroadcast(this, 42, intent, 0)
             val calendar = Calendar.getInstance()
@@ -126,34 +131,6 @@ class AjouterActivity : AppCompatActivity() , GoogleApiClient.ConnectionCallback
             10 -> {
                 if(resultCode == RESULT_OK){
                     iv_book_preview.setImageBitmap(BitmapFactory.decodeFile(filePath))
-                }
-            }
-            42 -> {
-                if (resultCode == RESULT_OK) {
-                    val r = data?.getIntExtra(ConfirmationActivity.EXTRA_ISCONFIRMED, ConfirmationActivity.VAL_CANCEL) ?: ConfirmationActivity.VAL_CANCEL
-                    when(r){
-                        ConfirmationActivity.VAL_CONFIRMED -> {
-                            Ajouter_Livre()
-                        }
-                        ConfirmationActivity.VAL_EDIT -> { } // rien de spécial à faire
-                        ConfirmationActivity.VAL_CANCEL -> {
-                            // On prévient MainActivity que la liste n'a PAS changé
-                            val retIntent = Intent()
-                            retIntent.putExtra(EXTRA_LIST_CHANGED, false)
-                            setResult(Activity.RESULT_OK, retIntent)
-
-                            //On supprime la photo si on a pas ajouté le livre
-                            if(filePath != null){
-                                var image = File(filePath)
-                                image.delete()
-                            }
-
-                            finish()
-                        }
-                    }
-                } else if(resultCode == RESULT_CANCELED) {
-                    // on va considérer que le bouton "retour" du téléphone est équivalent à notre bouton "modifier"
-                    // comme ci-dessus, rien de spécial à faire du coup
                 }
             }
         }

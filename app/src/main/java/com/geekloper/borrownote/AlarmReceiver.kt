@@ -17,13 +17,16 @@ class AlarmReceiver : BroadcastReceiver() {
         val nom_livre = intent.getStringExtra(AjouterActivity.EXTRA_NOM_LIVRE)
         val date = intent.getStringExtra(AjouterActivity.EXTRA_DATE)
         val note = intent.getStringExtra(AjouterActivity.EXTRA_NOTE)
+        val latitude = intent.getStringArrayExtra(AjouterActivity.EXTRA_ADRESS_LATITUDE)
+        val longtitude= intent.getStringExtra(AjouterActivity.EXTRA_ADRESS_LONGTITUDE)
 
-        //TODO : insert location
          context.dbLivres.use {
             insert(DBLivres.TABLE_LIVRES,
                     DBLivres.COLUMN_LIVRES_NOTE to note,
                     DBLivres.COLUMN_LIVRES_TITRE to nom_livre,
-                    DBLivres.COLUMN_LIVRES_DATE to Date(date).time)
+                    DBLivres.COLUMN_LIVRES_DATE to Date(date).time,
+                    DBLivres.COLUMN_LIVRES_ADRESS_LATITUDE to latitude,
+                    DBLivres.COLUMN_LIVRES_ADRESS_LONGTITUDE to longtitude)
         }
 
         val notif = NotificationCompat.Builder(context , "msg")
